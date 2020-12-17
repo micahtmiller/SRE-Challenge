@@ -1,0 +1,9 @@
+aws_region="us-east-1"
+allocated_cpu_to_fargate="1024"
+allocated_memory_to_fargate="2048"
+number_of_az_to_deploy="3"
+url_to_container_image="855748743798.dkr.ecr.us-east-1.amazonaws.com/dynamicenablement:latest"
+port_number_to_run_the_container=3000
+number_of_containers_to_deploy=3
+task_execution_role="DynamicEnablement-ecs"
+health_check_path="/"
