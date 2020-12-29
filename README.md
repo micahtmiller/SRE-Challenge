@@ -18,10 +18,11 @@ As you design and deploy your solution, please make sure you keep these concepts
 * What is my reliability? (Monitoring and dashboard)
 * How can I improve my reliability, or do I need to?
 
-We are not locked on any specific cloud provider, so choose the tools that work for you.
+Ideally, the solution would be in GCP, however AWS would also be acceptable.
 
 A complete solution should include:
 * Infrastructure deployed using IaC
 * Service deployed
+* Automated deployment pipeline
 * Monitoring
 * SLI/SLO dashboard
