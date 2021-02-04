@@ -13,7 +13,7 @@ jobs:
       - name: Publish to Registry
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
-          name: sre-challenge/app1
+          name: gcr.io/sre-challenge/app1
           username: ${{ steps.gcloud.outputs.username }}
           password: ${{ steps.gcloud.outputs.password }}
           registry: gcr.io
