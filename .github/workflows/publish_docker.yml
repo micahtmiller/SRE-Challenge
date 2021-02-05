@@ -1,5 +1,9 @@
 name: Publish Docker
-on: [push]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,3 +21,4 @@ jobs:
           username: ${{ steps.gcloud.outputs.username }}
           password: ${{ steps.gcloud.outputs.password }}
           registry: gcr.io
+          no_push: ${{ github.event_name == 'pull_request' }}
