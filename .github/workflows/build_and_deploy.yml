@@ -1,0 +1,72 @@
+name: Build and Deploy
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Login to gcloud registry
+        id: gcloud
+        uses: elgohr/gcloud-login-action@master
+        with:
+          account_key: ${{ secrets.GCLOUD_KEY }}
+      - name: Publish to Registry
+        id: docker
+        uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+          name: gcr.io/${{ secrets.GCLOUD_PROJECT_ID }}/app1
+          username: ${{ steps.gcloud.outputs.username }}
+          password: ${{ steps.gcloud.outputs.password }}
+          registry: gcr.io
+          no_push: ${{ github.event_name == 'pull_request' }}
+          snapshot: true
+  terraform:
+    name: 'Terraform'
+    runs-on: ubuntu-latest
+    needs: build
+    env:
+      working-directory: ./terraform
+      docker_image: gcr.io/${{ secrets.GCLOUD_PROJECT_ID }}/app1:${{ needs.build.docker.snapshot-tag }}
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ${{ env.working-directory }}
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GCLOUD_TF_KEY }}
+
+      - name: Terraform Format
+        run: terraform fmt -check
+        working-directory: ${{ env.working-directory }}
+
+      - name: Terraform Plan
+        run: terraform plan
+        working-directory: ${{ env.working-directory }}
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GCLOUD_TF_KEY }}
+          TF_VAR_docker_image: ${{ env.docker_image }}
+          TF_VAR_project_id: ${{ secrets.GCLOUD_PROJECT_ID }}
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        working-directory: ${{ env.working-directory }}
+        run: terraform apply -auto-approve
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GCLOUD_TF_KEY }}
+          TF_VAR_docker_image: ${{ env.docker_image }}
+          TF_VAR_project_id: ${{ secrets.GCLOUD_PROJECT_ID }}

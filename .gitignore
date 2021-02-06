@@ -1,0 +1,3 @@
+terraform_local.tfvars
+.terraform/
+.terraform.lock.hcl
