@@ -10,5 +10,5 @@ trim_trailing_whitespace = true
 indent_size = 4
 indent_style = space
 
-[*.tf, *.yml, *.yaml]
+[*.{tf,yml,yaml}]
 indent_size = 2
