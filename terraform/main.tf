@@ -3,7 +3,7 @@ resource "google_project_service" "run" {
 }
 
 resource "google_cloud_run_service" "app1" {
-  name = "app1"
+  name     = "app1"
   location = var.region
 
   template {
@@ -15,7 +15,7 @@ resource "google_cloud_run_service" "app1" {
   }
 
   traffic {
-    percent = 100
+    percent         = 100
     latest_revision = true
   }
 
