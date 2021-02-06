@@ -1,6 +1,6 @@
-resource "google_project_service" "run" {
-  service = "run.googleapis.com"
-}
+# resource "google_project_service" "run" {
+#   service = "run.googleapis.com"
+# }
 
 resource "google_cloud_run_service" "app1" {
   name     = "app1"
