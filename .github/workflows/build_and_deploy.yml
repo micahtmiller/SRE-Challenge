@@ -30,7 +30,7 @@ jobs:
     needs: build
     env:
       working-directory: ./terraform
-      docker_image: gcr.io/${{ secrets.GCLOUD_PROJECT_ID }}/app1:${{ needs.build.docker.snapshot-tag }}
+      docker_image: gcr.io/${{ secrets.GCLOUD_PROJECT_ID }}/app1:${{ needs.build.docker.outputs.snapshot-tag }}
 
     defaults:
       run:
