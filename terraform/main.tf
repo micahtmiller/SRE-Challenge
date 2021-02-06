@@ -19,7 +19,7 @@ resource "google_cloud_run_service" "app1" {
     latest_revision = true
   }
 
-  depends_on = [google_project_service.run]
+  # depends_on = [google_project_service.run]
 }
 
 resource "google_cloud_run_service_iam_member" "public" {
