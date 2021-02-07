@@ -63,6 +63,7 @@ jobs:
           GOOGLE_CREDENTIALS: ${{ secrets.GCLOUD_TF_KEY }}
           TF_VAR_docker_image: ${{ env.docker_image }}
           TF_VAR_project_id: ${{ secrets.GCLOUD_PROJECT_ID }}
+          TF_VAR_notification_email: ${{ secrets.GCLOUD_NOTIFICATION_EMAIL }}
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -72,3 +73,4 @@ jobs:
           GOOGLE_CREDENTIALS: ${{ secrets.GCLOUD_TF_KEY }}
           TF_VAR_docker_image: ${{ env.docker_image }}
           TF_VAR_project_id: ${{ secrets.GCLOUD_PROJECT_ID }}
+          TF_VAR_notification_email: ${{ secrets.GCLOUD_NOTIFICATION_EMAIL }}

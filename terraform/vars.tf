@@ -12,3 +12,8 @@ variable "docker_image" {
   type        = string
   description = "The docker image to use for cloud run"
 }
+
+variable "notification_email" {
+  type        = string
+  description = "Email address for alerts"
+}
