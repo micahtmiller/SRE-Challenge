@@ -1,0 +1,29 @@
+=== Dynamic Enablement
+
+==== Why
+This application provides the answer to everything! This helm chart will host the answer in a cluster.
+Given the implications of such a powerful answer, all access to the application inside the EKS cluster has been locked down. The only way to view the answer is to be inside the
+dynamic-enablement namespace and port forward to your local host. The pod hosting it cannot communicate with any resource outside of it's namespace. So please be careful what you give it access to!
+
+==== Example Install
+To install (or upgrade) this chart, go to the directory:
+
+helm/charts
+
+Type the command:
+[source, commandline]
+----
+$ helm upgrade dynamic-enablement --install ./dynamic-enablement --values ./dynamic-enablement/values --namespace dynamic-enablement
+----
+
+==== How to use Dynamic-Enablement
+Given the security surrounding the answer to everything, you will need to be exec'd into the namespace and port forward the pod to receive the answer. If you're using K9s, simply authenticate with the cluster, shift-f the pod, and use local host to view it in a browser.
+If you're using kubectl on a command line, use the following command after you've setup your k8s context:
+
+[source,commandline]
+----
+$ kubectl get deployment --namespace dynamic-enablement
+$ kubectl port-forward deployment/<deployment output from above command> 8000 --namespace dynamic-enablement
+----
+
+Open a web browser and navigate to localhost:8000

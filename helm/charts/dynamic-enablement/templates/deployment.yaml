@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dyn-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      group: blue
+  template:
+    metadata:
+      name: dynamic-deployment
+      labels:
+        group: blue
+    spec:
+      containers:
+        - name:  {{ .Values.image.name}}
+          image: {{ .Values.image.repository }}
+          ports:
+            - containerPort: 80

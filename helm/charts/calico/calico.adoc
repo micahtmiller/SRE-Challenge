@@ -1,0 +1,61 @@
+=== Calico
+
+==== Why
+Calico is an open source networking and network security solution for containers, virtual machines, and native host-based workloads. Supports network isolation and promotes pod security.
+
+See https://docs.projectcalico.org/archive/v.317/about/about-network-policy
+
+==== Example Install
+To install or upgrade the chart, navigate to this directory
+
+helm/charts
+
+Type the command
+[source, commandline]
+----
+$ helm upgrade calico --install calico ./calico/ --namespace kube-system
+----
+
+This will install a barebones calico controller and by default, will not apply any network policies.
+
+==== How to use Network Policies
+To test a network policy, use the kubectl command apply to manually attach a new policy
+
+[source, commandline]
+----
+$ kubectl apply -f test-policy.yaml --namespace test-namespace
+----
+
+An easy example to use is a policy that denies all Egress traffic outside it's specified scope. Essentially locking down the pod.
+
+[source, yaml]
+----
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: test-policy
+  namespace: test-namespace
+spec:
+  podSelector:
+    matchLabels:
+      group: blue
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+      - namespaceSelector:
+          matchLabels:
+            name: test-namespace
+    - ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+----
+The example above will attach to any pods in the namespace "test-namespace" that have the label "group: blue".
+The egress " - to:" block tells the controller that this pod can only send outbound communication to any resources in the test-namespace.
+The "- ports:" block tells the controller that port 53 is allowed for any DNS resolution (if in place)
+
+==== How to add a network policy to automation
+Once a network policy has been verified, simply add the yaml to the templates directory for the chart that will be using it.
+It will be picked up as part of the helm install for the chart and immediately take effect. Please note that Calico must be installed prior to any policy attachments.
