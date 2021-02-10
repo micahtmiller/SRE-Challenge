@@ -1,0 +1,5 @@
+dependencies:
+  - name: kube-state-metrics
+    version: "2.9.*"
+    repository: http://opscert-artifactory.route53.lexis.com/artifactory/list/pecs-helm-virtual/
+    condition: datadog.kubeStateMetricsEnabled

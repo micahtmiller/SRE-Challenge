@@ -1,0 +1,19 @@
+=== Datadog
+
+==== Why
+Datadog is a hosted infrastructure monitoring platform. This chart adds the Datadog Agent to all nodes in the cluster via a DaemonSet. It also optionally depends on the kube-state-metrics chart. For more information about monitoring Kubernetes with Datadog, please refer to the Datadog documentation website.
+
+==== Example Install
+To install (or upgrade) this chart, go to the directory:
+
+helm/charts
+
+Type the command:
+[source, commandline]
+----
+$ helm upgrade datadog --install datadog ./datadog --values ./datadog/values --namespace kube-system
+----
+
+==== How to use Datadog
+Once the chart has been installed, use the host specified in the values file site parameter and navigate to that host in a browser.
+Depending on how the agent was initially setup, a SAML login or root user login will be prompted. Once authenticated, the user will have access to view dashboards, install new integrations, and view live metrics.
