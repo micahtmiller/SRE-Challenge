@@ -1,0 +1,27 @@
+=== Prometheus
+
+https://prometheus.io/[Prometheus], a https://cncf.io/[Cloud Native
+Computing Foundation] project, is a systems and service monitoring
+system. It collects metrics from configured targets at given intervals,
+evaluates rule expressions, displays the results, and can trigger alerts
+if some condition is observed to be true.
+
+==== Why
+
+EKS services need to be monitored for alert purposes, Metrics are sent to datadog for trending.
+
+==== Installing the Chart
+
+To install the chart with the release name `my-release`:
+
+[source,console]
+----
+$ helm install --name my-release stable/prometheus
+----
+
+The command deploys Prometheus on the Kubernetes cluster in the default
+configuration. The link:#configuration[configuration] section lists the
+parameters that can be configured during installation.
+
+==== Using the chart
+Prometheus has an alert manager which will scrape for InstanceDown, ServiceAvailability, and Memory issues. Any issues that last for 5m will send an email to the specified address. Default is set to bcw6303@gmail.com
