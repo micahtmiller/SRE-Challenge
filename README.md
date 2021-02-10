@@ -21,8 +21,8 @@ As you design and deploy your solution, please make sure you keep these concepts
 Ideally, the solution would be in GCP, however AWS would also be acceptable.
 
 A complete solution should include:
-* Infrastructure deployed using IaC
-* Service deployed
+* Infrastructure deployed using IaC (terraform)
+* Service deployed (via helm)
 * Automated deployment pipeline
-* Monitoring
-* SLI/SLO dashboard
+* Monitoring (promethues + datadog)
+* SLI/SLO dashboard (datadog)
