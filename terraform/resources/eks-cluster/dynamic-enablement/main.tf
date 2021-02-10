@@ -15,7 +15,7 @@ module "dynamic-enablement-cluster" {
   providers = {
     aws = aws.us-east-2
   }
-  source = "..\/..\/..\/..\/SRE-Challenge-Fork\/SRE-Challenge\/terraform\/modules/eks-cluster"
+  source = "../../../modules/eks-cluster"
 
   eks_name = "dynamic-enablement"
   subnet_ids = [
