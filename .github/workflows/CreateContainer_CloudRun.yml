@@ -43,9 +43,9 @@ jobs:
     runs-on: ubuntu-18.04
     needs: build
     env:
-      project_id = ${{ env.PROJECT_ID }}
-      gcp_creds = ${{ env.GCP_CREDS }}
-      docker_img = ${{ env.DOCKER_IMG }}
+      project_id: ${{ env.PROJECT_ID }}
+      gcp_creds: ${{ env.GCP_CREDS }}
+      docker_img: ${{ env.DOCKER_IMG }}
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
