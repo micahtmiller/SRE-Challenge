@@ -1,6 +1,6 @@
-variable "project" {}
+variable "project_id" {}
 
-variable "creds" {}
+variable "gcp_creds" {}
 
 variable "region" {
   type        = string

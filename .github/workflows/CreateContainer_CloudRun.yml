@@ -17,6 +17,7 @@ env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT }}
   GAR_LOCATION: ${{ secrets.ARTIFACT_REG }}
   GCP_CREDS: ${{ secrets.GCP_CREDS }}
+  DOCKER_IMG: ${{ secrets.DOCKER_IMG }}
 
 jobs:
 
@@ -41,6 +42,10 @@ jobs:
     name: 'Terraform Execute'
     runs-on: ubuntu-18.04
     needs: build
+    env:
+      project_id = ${{ env.PROJECT_ID }}
+      gcp_creds = ${{ env.GCP_CREDS }}
+      docker_img = ${{ env.DOCKER_IMG }}
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:

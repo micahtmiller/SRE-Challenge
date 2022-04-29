@@ -16,10 +16,9 @@ provider "docker" {
 }
 
 provider "google" {
-  # credentials = file(var.creds)
   credentials = file("deft-weaver-346622-51fa8dd0c029.json")
 
-  project = var.project
+  project = project_id
   region  = var.region
   zone    = var.zone
 }
