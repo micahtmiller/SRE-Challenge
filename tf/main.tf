@@ -6,7 +6,7 @@ resource "google_cloud_run_service" "app1" {
     spec {
       containers {
         # image = "gcr.io/cloudrun/hello"
-        image = docker_img
+        image = TF_VAR_docker_img
         resources {
           limits = { "memory" = "128Mi" }
         }
