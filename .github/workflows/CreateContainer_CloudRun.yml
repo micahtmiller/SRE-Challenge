@@ -67,18 +67,18 @@ jobs:
       run: pwd | terraform fmt -check
       working-directory: ${{ env.WORKING-DIR }}
       env:
-        project_id: ${{ env.PROJECT_ID }}
-        gcp_creds: ${{ env.GCP_CREDS }}
-        docker_img: ${{ env.DOCKER_IMG }}
+        TF_VAR_project_id: ${{ env.PROJECT_ID }}
+        TF_VAR_gcp_creds: ${{ env.GCP_CREDS }}
+        TF_VAR_docker_img: ${{ env.DOCKER_IMG }}
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       run: terraform plan -input=false
       working-directory: ${{ env.WORKING-DIR }}
       env:
-        project_id: ${{ env.PROJECT_ID }}
-        gcp_creds: ${{ env.GCP_CREDS }}
-        docker_img: ${{ env.DOCKER_IMG }}
+        TF_VAR_project_id: ${{ env.PROJECT_ID }}
+        TF_VAR_gcp_creds: ${{ env.GCP_CREDS }}
+        TF_VAR_docker_img: ${{ env.DOCKER_IMG }}
 
       # On push to master, build or change infrastructure according to Terraform configuration files
       # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
@@ -87,6 +87,6 @@ jobs:
       working-directory: ${{ env.WORKING-DIR }}
       run: terraform apply -auto-approve -input=false
       env:
-        project_id: ${{ env.PROJECT_ID }}
-        gcp_creds: ${{ env.GCP_CREDS }}
-        docker_img: ${{ env.DOCKER_IMG }}
+        TF_VAR_project_id: ${{ env.PROJECT_ID }}
+        TF_VAR_gcp_creds: ${{ env.GCP_CREDS }}
+        TF_VAR_docker_img: ${{ env.DOCKER_IMG }}

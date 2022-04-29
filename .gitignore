@@ -1,5 +1,5 @@
 /tf/.terraform/
 /tf/.terraform.lock.hcl
-# *.tfvars
+*.tfvars
 .dockerignore
 *.json
