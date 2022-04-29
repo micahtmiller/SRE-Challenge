@@ -1,7 +1,5 @@
 variable "project_id" {}
 
-variable "gcp_creds" {}
-
 variable "region" {
   type        = string
   description = "GCP region"
