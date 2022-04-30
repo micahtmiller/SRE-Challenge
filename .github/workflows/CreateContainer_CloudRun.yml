@@ -67,7 +67,8 @@ jobs:
       run: pwd | terraform fmt -check
       working-directory: ${{ env.WORKING-DIR }}
       env:
-        TF_VAR_project_id: ${{ env.PROJECT_ID }}
+        TF_VAR_project: ${{ env.PROJECT_ID }}
+        TF_VAR_gc_creds: ${{ env.GCP_CREDS }}
         TF_VAR_docker_img: ${{ env.DOCKER_IMG }}
 
     # Generates an execution plan for Terraform
@@ -75,7 +76,8 @@ jobs:
       run: terraform plan -input=false
       working-directory: ${{ env.WORKING-DIR }}
       env:
-        TF_VAR_project_id: ${{ env.PROJECT_ID }}
+        TF_VAR_project: ${{ env.PROJECT_ID }}
+        TF_VAR_gc_creds: ${{ env.GCP_CREDS }}
         TF_VAR_docker_img: ${{ env.DOCKER_IMG }}
 
       # On push to master, build or change infrastructure according to Terraform configuration files
@@ -85,5 +87,6 @@ jobs:
       working-directory: ${{ env.WORKING-DIR }}
       run: terraform apply -auto-approve -input=false
       env:
-        TF_VAR_project_id: ${{ env.PROJECT_ID }}
+        TF_VAR_project: ${{ env.PROJECT_ID }}
+        TF_VAR_gc_creds: ${{ env.GCP_CREDS }}
         TF_VAR_docker_img: ${{ env.DOCKER_IMG }}
