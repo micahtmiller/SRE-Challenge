@@ -1,4 +1,4 @@
-variable "project_id" {}
+variable "project" {}
 
 variable "gc_creds" {}
 
