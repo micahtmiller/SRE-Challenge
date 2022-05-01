@@ -16,7 +16,8 @@ provider "docker" {
 }
 
 provider "google" {
-  credentials = file(var.gc_creds)
+  # credentials = file(var.gc_creds)
+  credentials = file("projects/358369792430/secrets/gcp_creds")
   project     = var.project
   region      = var.region
   zone        = var.zone
