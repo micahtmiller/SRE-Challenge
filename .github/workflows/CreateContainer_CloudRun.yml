@@ -15,33 +15,17 @@ on:
 env:
   WORKING-DIR: ./tf
   PROJECT_ID: ${{ secrets.GCP_PROJECT }}
-  GAR_LOCATION: ${{ secrets.ARTIFACT_REG }}
+  SERVICE: dyn-enable-app
   GCP_CREDS: ${{ secrets.GCP_CREDS }}
+  CLOUDRUN: ${{ secrets.GCP_CLOUDRUN }}
   DOCKER_IMG: ${{ secrets.DOCKER_IMG }}
 
 jobs:
 
-  # Build Docker Image Job
-  build:
-    runs-on: ubuntu-18.04
-
-    steps:
-
-    - name: Checkout
-      uses: actions/checkout@v2
-
-    # Authentic to GCP via credentials json
-    - name: Google Auth
-      id: auth
-      uses: 'google-github-actions/auth@v0'
-      with:
-        credentials_json: ${{ env.GCP_CREDS }}
-
-  # Terraform Job - Build Container and 
+  # Terraform Job
   terraform:
     name: 'Terraform Execute'
-    runs-on: ubuntu-18.04
-    needs: build
+    runs-on: ubuntu-latest
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -66,27 +50,25 @@ jobs:
     - name: Terraform Format
       run: pwd | terraform fmt -check
       working-directory: ${{ env.WORKING-DIR }}
-      env:
-        TF_VAR_project: ${{ env.PROJECT_ID }}
-        TF_VAR_gc_creds: ${{ env.GCP_CREDS }}
-        TF_VAR_docker_img: ${{ env.DOCKER_IMG }}
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
-      run: terraform plan -input=false
+      run: pwd | terraform plan -input=false
       working-directory: ${{ env.WORKING-DIR }}
       env:
         TF_VAR_project: ${{ env.PROJECT_ID }}
-        TF_VAR_gc_creds: ${{ env.GCP_CREDS }}
+        TF_VAR_app_name: ${{ env.SERVICE }}
+        TF_VAR_gc_creds: ${{ env.CLOUDRUN }}
         TF_VAR_docker_img: ${{ env.DOCKER_IMG }}
 
       # On push to master, build or change infrastructure according to Terraform configuration files
       # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
     - name: Terraform Apply
-      if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+      # if: github.ref == 'refs/heads/master' && github.event_name == 'push'
       working-directory: ${{ env.WORKING-DIR }}
-      run: terraform apply -auto-approve -input=false
+      run: pwd | terraform apply -auto-approve -input=false
       env:
         TF_VAR_project: ${{ env.PROJECT_ID }}
-        TF_VAR_gc_creds: ${{ env.GCP_CREDS }}
+        TF_VAR_app_name: ${{ env.SERVICE }}
+        TF_VAR_gc_creds: ${{ env.CLOUDRUN }}
         TF_VAR_docker_img: ${{ env.DOCKER_IMG }}

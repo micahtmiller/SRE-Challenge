@@ -1,4 +1,5 @@
 resource "google_cloud_run_service" "app1" {
+  provider = google
   name     = var.app
   location = var.region
 
@@ -18,6 +19,15 @@ resource "google_cloud_run_service" "app1" {
     latest_revision = true
   }
 
+}
+
+# Make Cloud Run service publicly accessible
+resource "google_cloud_run_service_iam_member" "allUsers" {
+  provider = google
+  service  = google_cloud_run_service.app1.name
+  location = google_cloud_run_service.app1.location
+  role     = "roles/run.invoker"
+  member   = "allUsers"
 }
 
 output "url" {
