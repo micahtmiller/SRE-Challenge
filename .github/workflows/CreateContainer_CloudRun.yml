@@ -1,0 +1,74 @@
+# This workflow creates a container from the image stored in GCP Artificat Registry and stores it in CloudRun
+
+name: Docker Image CI
+
+on:
+  push:
+    branches: dev_ryan
+  pull_request:
+    branches: dev_ryan
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Set environment variables
+env:
+  WORKING-DIR: ./tf
+  PROJECT_ID: ${{ secrets.GCP_PROJECT }}
+  SERVICE: dyn-enable-app
+  GCP_CREDS: ${{ secrets.GCP_CREDS }}
+  CLOUDRUN: ${{ secrets.GCP_CLOUDRUN }}
+  DOCKER_IMG: ${{ secrets.DOCKER_IMG }}
+
+jobs:
+
+  # Terraform Job
+  terraform:
+    name: 'Terraform Execute'
+    runs-on: ubuntu-latest
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+      
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    - name: Terraform Init
+      run: pwd | terraform init
+      working-directory: ${{ env.WORKING-DIR }}
+
+    # Checks that all Terraform configuration files adhere to a canonical format
+    - name: Terraform Format
+      run: pwd | terraform fmt -check
+      working-directory: ${{ env.WORKING-DIR }}
+
+    # Generates an execution plan for Terraform
+    - name: Terraform Plan
+      run: pwd | terraform plan -input=false
+      working-directory: ${{ env.WORKING-DIR }}
+      env:
+        TF_VAR_project: ${{ env.PROJECT_ID }}
+        TF_VAR_app_name: ${{ env.SERVICE }}
+        TF_VAR_gc_creds: ${{ env.CLOUDRUN }}
+        TF_VAR_docker_img: ${{ env.DOCKER_IMG }}
+
+      # On push to master, build or change infrastructure according to Terraform configuration files
+      # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
+    - name: Terraform Apply
+      # if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+      working-directory: ${{ env.WORKING-DIR }}
+      run: pwd | terraform apply -auto-approve -input=false
+      env:
+        TF_VAR_project: ${{ env.PROJECT_ID }}
+        TF_VAR_app_name: ${{ env.SERVICE }}
+        TF_VAR_gc_creds: ${{ env.CLOUDRUN }}
+        TF_VAR_docker_img: ${{ env.DOCKER_IMG }}

@@ -1,0 +1,6 @@
+/tf/.terraform/
+/tf/.terraform.lock.hcl
+*.tfvars
+.dockerignore
+*.json
+cloudbuild.yaml
