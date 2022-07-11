@@ -1,3 +1,13 @@
-FROM nginx
+FROM node:alpine
 
-COPY app /usr/share/nginx/html
+WORKDIR /app
+
+COPY package.json .
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 5000
+
+CMD [ "node", "index.js" ]
